@@ -9,10 +9,10 @@ router.post('/', async (req, res) => {
     if (error) {
         return res.status(400).send(error.details[0].message);
     }
- 
+
     // Check if this user already exisits
     let user = await User.findOne({username: req.body.username}, function(err, resad){ });
-
+    
     if (user) {
         return res.status(400).send('That user already exisits!');
     } else {

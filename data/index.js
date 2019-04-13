@@ -13,6 +13,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/myapp', {useNewUrlParser: true})
 app.use(express.json());
 app.use('/api/users', users);
 app.use('/api/auth', auth);
- 
+
 const port = process.env.PORT || 27017;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
