@@ -11,4 +11,3 @@ request('http://api.reimaginebanking.com/accounts?key=a3555d774ac75bee7c1c13c843
 	// 	console.log(obj)
 	// });
 })
-
