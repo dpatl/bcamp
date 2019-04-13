@@ -64,7 +64,7 @@
 						</button>
 					</div>
 					<div class="container-login100-form-btn" style = "margin-top:10px">
-						<button class="login100-form-btn">
+						<button class="login100-form-btn" id = "signupButn">
 							Sign Up
 						</button>
 					</div>
@@ -98,6 +98,12 @@
 	<script src="../../vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
 	<script src="../../js/main.js"></script>
+
+	<script type="text/javascript">
+    document.getElementById("signupButn").onclick = function () {
+        location.href = "../signup/index.html"
+    };
+	</script>
 
 </body>
 </html>
