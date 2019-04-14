@@ -44,16 +44,16 @@
                     <h3 style="text-align:center;">Your Transactions</h3>
                     <div style="margin-top:20px" class="row">
                         <div style="text-align:center; color:#0E4D92; font-size:20px; " id="desc" class="column"><b>Description</b></div>
-                        <div style="text-align:center; color:#0E4D92; font-size:20px; margin-bottom: 10px;" id="type" class="column">Type</div>
-                        <div style="text-align:center; color:#0E4D92; font-size:20px; margin-bottom: 10px;" id="amt"  class="column">Amount</div>
-                        <div style="text-align:center; color:#0E4D92; font-size:20px; margin-bottom: 10px;" id="date" class="column">Date</div>
+                        <div style="text-align:center; color:#0E4D92; font-size:20px; margin-bottom: 10px;" id="type" class="column"><b>Type</b></div>
+                        <div style="text-align:center; color:#0E4D92; font-size:20px; margin-bottom: 10px;" id="amt"  class="column"><b>Amount</b></div>
+                        <div style="text-align:center; color:#0E4D92; font-size:20px; margin-bottom: 10px;" id="date" class="column"><b>Date</b></div>
                     </div>
                 </div>
                 
                 <div id="reports" class="tabcontent">
                     <h3 style="text-align:center;">Your April Spendings</h3>
                     
-                    <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+                    <div id="chartContainer" style="height: 300px; width:100%;"></div>
                 </div>
             
 			</div>
@@ -99,14 +99,14 @@
                 "restaurant": 0.0,
                 "tech": 0.0,
                 "food": 0.0,
-                "clothing": 0.0
+                "clothing": 0.0,
+                "entertainment": 0.0
             };
             total = 0.0;
 
             for (var i = 0; i < purchases.length; i++) {
                 merchant = merchants.getMerchant(purchases[i].merchant_id);
                 categories = merchant.category; 
-                
 
                 for (var j = 0; j < categories.length; j++) {
                     currCat = categories[j];
@@ -114,12 +114,11 @@
                     if (currCat.toLowerCase() == "tech") {mapping["tech"] = mapping["tech"] + purchases[i].amount; total += purchases[i].amount;}
                     if (currCat.toLowerCase() == "food") {mapping["food"] = mapping["food"] + purchases[i].amount; total += purchases[i].amount;}
                     if (currCat.toLowerCase() == "clothing") {mapping["clothing"] = mapping["clothing"] + purchases[i].amount; total += purchases[i].amount;}
+                    if (currCat.toLowerCase() == "entertainment") {mapping["entertainment"] = mapping["entertainment"] + purchases[i].amount; total += purchases[i].amount;}
                 }
-
             }
 
             createChart(mapping, total);
-
         }
 
         function displayPurchases(purchases, merchants) {
@@ -160,7 +159,7 @@
                 data: [{
                     type: "pie",
                     startAngle: 240,
-                    radius: 80,
+                    radius: 100,
                     yValueFormatString: "##0.00\"%\"",
                     indexLabel: "{label} {y}",
                     dataPoints: []
