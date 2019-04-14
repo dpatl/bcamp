@@ -59,11 +59,6 @@
 				</button>
 			</div>
 
-			<div class="container-login100-form-btn" id = "recButn" style="position: absolute; margin-top:-446px; margin-left:162px">
-				<button class="login100-form-btn">
-					Recommendations 
-				</button>
-			</div>
 
 		</div>
 	</div>
@@ -123,16 +118,11 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
 	$(document).ready(function(){
-
 		var showHeaderAt = 150;
-
 		var win = $(window),
 				body = $('body');
-
 		if(win.width() > 400){
-
 			win.on('scroll', function(e){
-
 				if(win.scrollTop() > showHeaderAt) {
 					body.addClass('fixed');
 				}
@@ -140,7 +130,6 @@
 					body.removeClass('fixed');
 				}
 			});
-
 		}
 
 	});
