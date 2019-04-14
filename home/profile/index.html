@@ -102,10 +102,12 @@
 
     <script>
             var map;
-            function initMap() {
+            function initMap(center_stuff, others) {
+                console.log(center_stuff);
+                console.log(others);
             map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 13.5,
-                center: new google.maps.LatLng(38.9072, -77.0369)
+                center: new google.maps.LatLng(center_stuff.lat, center_stuff.lng)
             });
     
             var cityCircle = new google.maps.Circle({
@@ -119,7 +121,6 @@
                 radius: 1609.34
             });
 
-            
     
             // Create a <script> tag and set the USGS URL as the source.
             var script = document.createElement('script');
@@ -131,16 +132,8 @@
     
             // Loop through the results array and place a marker for each
             // set of coordinates.
-            window.eqfeed_callback = function(results) {
-            for (var i = 0; i < results.features.length; i++) {
-                var coords = results.features[i].geometry.coordinates;
-                var latLng = new google.maps.LatLng(coords[1],coords[0]);
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map
-                });
-            }
-            }
+           
+
     </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-Ftgni6sX-MLo-3vbNzzsFkqPLJo8ezY"></script>
 
@@ -330,14 +323,23 @@
             success : function( data, textStatus ) {
                 console.log( textStatus, data );
                 var places = [];
+                var others = [];
                 for (var i = 0; i < data.results.length; i++) {
+                    others.push(data.results[i]);
                     result = data.results[i].geometry.location;
                     console.log(result);
                     places.push(result);
                 }
 
             console.log(places);
-            return places;
+            for(var i = 0; i < 10; i++){
+                var latln = new google.maps.LatLng(places[i].lat, places[i].lng);
+                var marker = new google.maps.Marker({
+                    position: latln,
+                    map: map
+                });
+            }
+            return places, others;
             // return places;
             },
             dataType: "json"
