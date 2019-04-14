@@ -42,12 +42,12 @@
 					</span>
 
 					<div class="wrap-input100 validate-input" data-validate = "Enter username">
-						<input class="input100" type="text" name="username" placeholder="Username">
+						<input id="username" class="input100" type="text" name="username" placeholder="Username">
 						<span class="focus-input100" data-placeholder="&#xf207;"></span>
 					</div>
 
 					<div class="wrap-input100 validate-input" data-validate="Enter password">
-						<input class="input100" type="password" name="pass" placeholder="Password">
+						<input id="password" class="input100" type="password" name="password" placeholder="Password">
 						<span class="focus-input100" data-placeholder="&#xf191;"></span>
 					</div>
 
@@ -59,15 +59,16 @@
 					</div>
 
 					<div class="container-login100-form-btn">
-						<button class="login100-form-btn">
+						<button class="login100-form-btn" onclick="post();">
 							Login 
 						</button>
 					</div>
+					
 					<div class="container-login100-form-btn" style = "margin-top:10px">
-						<button class="login100-form-btn">
+						<button class="login100-form-btn" id = "signupButn" onclick="test();"></button>
 							Sign Up
 						</button>
-					</div>
+					</div> 
 
 					<div class="text-center p-t-90">
 						<a class="txt1" href="#">
@@ -79,6 +80,28 @@
 		</div>
 	</div>
 	
+	<script>
+		function post() {
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", "http://127.0.0.1:27017/api/auth", true);
+			xhr.setRequestHeader('Content-Type', 'application/json');
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === 4) {
+					var response = JSON.parse(xhr.responseText);
+					if (xhr.status === 200 && response.status === 'OK') {
+						console.log('successful');
+					} else {
+						console.log('failed');
+					}
+				}
+			}
+			xhr.send(JSON.stringify({
+				"username": document.getElementById("username").value,
+				"password": document.getElementById("password").value
+			}));
+		}
+	</script>
+
 
 	<div id="dropDownSelect1"></div>
 	
@@ -98,6 +121,12 @@
 	<script src="../../vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
 	<script src="../../js/main.js"></script>
+
+	<script type="text/javascript">
+    document.getElementById("signupButn").onclick = function () {
+        location.href = "../signup/index.html"
+    };
+	</script>
 
 </body>
 </html>

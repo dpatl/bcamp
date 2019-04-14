@@ -11,12 +11,48 @@
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="../css/util.css">
 	<link rel="stylesheet" type="text/css" href="../css/main.css">
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Basic Header</title>
+
+	<link rel="stylesheet" href="assets/demo.css">
+	<link rel="stylesheet" href="assets/header-fixed.css">
+	<link href='https://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
+
 <!--===============================================================================================-->
 </head>
 <body>
+	<header class="header-fixed">
+
+	<div class="header-limiter">
+
+		<h1><a href="#">Company<span>logo</span></a></h1>
+
+		<nav>
+		</nav>
+
+	</div>
+</header>
+<div class="header-fixed-placeholder"></div>
 	<div class="limiter">
 		<div class="container-login100" style="background-image: url('../images/bg-01.jpg');">
 			<div id="counter">0</div>
+
+			<div class="container-login100-form-btn" id = "loginButn" style="position: absolute; margin-top:-446px; margin-left:450px">
+				<button class="login100-form-btn">
+					Login 
+				</button>
+			</div>
+
+			<div class="container-login100-form-btn" id = "signupButn" style="position: absolute; margin-top:-446px; margin-left:590px">
+				<button class="login100-form-btn">
+					Sign Up 
+				</button>
+			</div>
+
 		</div>
 	</div>
 
@@ -39,5 +75,46 @@
 <!--===============================================================================================-->
 	<script src="../js/main.js"></script>
 	<script src="../js/savings"></script>
+
+	<script type="text/javascript">
+    document.getElementById("loginButn").onclick = function () {
+        location.href = "login/index.html"
+    };
+	</script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+
+	$(document).ready(function(){
+
+		var showHeaderAt = 150;
+
+		var win = $(window),
+				body = $('body');
+
+		// Show the fixed header only on larger screen devices
+
+		if(win.width() > 400){
+
+			// When we scroll more than 150px down, we set the
+			// "fixed" class on the body element.
+
+			win.on('scroll', function(e){
+
+				if(win.scrollTop() > showHeaderAt) {
+					body.addClass('fixed');
+				}
+				else {
+					body.removeClass('fixed');
+				}
+			});
+
+		}
+
+	});
+
+</script>
+
+
 </body>
 </html>
