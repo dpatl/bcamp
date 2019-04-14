@@ -72,7 +72,8 @@
                         <div id="map" style="margin-left:220px; margin-top:40px"></div>
                     </div>
 
-                    <div style="width:50%; margin-left:120px; margin-top: 20px; z-index: 10;" id="transList"></div>
+                    <div style="margin-top: 20px; z-index: 10;" id="transList">
+                    </div>
 
                
                    
@@ -166,10 +167,10 @@
 
         function monthlyReports(purchases, merchants) {
             var mapping = {
-                "tech": [0.0, [], []],
-                "food": [0.0, [], []],
-                "clothing": [0.0, [], []],
-                "entertainment": [0.0, [], []]
+                "Tech": [0.0, [], []],
+                "Food": [0.0, [], []],
+                "Clothing": [0.0, [], []],
+                "Entertainment": [0.0, [], []]
             };
             total = 0.0;
 
@@ -180,33 +181,35 @@
                 for (var j = 0; j < categories.length; j++) {
                     currCat = categories[j];
                     if (currCat.toLowerCase() == "restaurant") {
-                        mapping["food"][0] = mapping["food"][0] + purchases[i].amount; 
-                        mapping["food"][1].push(merchant);
-                        mapping["food"][2].push(purchases[i]);
+                        mapping["Food"][0] = mapping["Food"][0] + purchases[i].amount; 
+
+                        if (!(mapping["Food"][1].includes(merchant))) {mapping["Food"][1].push(merchant);}
+                        if (!(mapping["Food"][2].includes(purchases[i]))) {mapping["Food"][2].push(purchases[i]);}
+
                         total += purchases[i].amount;
                     }
                     else if (currCat.toLowerCase() == "tech") {
-                        mapping["tech"][0] = mapping["tech"][0] + purchases[i].amount; 
-                        mapping["tech"][1].push(merchant);
-                        mapping["tech"][2].push(purchases[i]);
+                        mapping["Tech"][0] = mapping["Tech"][0] + purchases[i].amount; 
+                        mapping["Tech"][1].push(merchant);
+                        mapping["Tech"][2].push(purchases[i]);
                         total += purchases[i].amount;
                     }
                     else if (currCat.toLowerCase() == "food") {
-                        mapping["food"][0] = mapping["food"][0] + purchases[i].amount; 
-                        mapping["food"][1].push(merchant);
-                        mapping["food"][2].push(purchases[i]);
+                        mapping["Food"][0] = mapping["Food"][0] + purchases[i].amount; 
+                        if (!(mapping["Food"][1].includes(merchant))) {mapping["Food"][1].push(merchant);}
+                        if (!(mapping["Food"][2].includes(purchases[i]))) {mapping["Food"][2].push(purchases[i]);}
                         total += purchases[i].amount;
                     }
                     else if (currCat.toLowerCase() == "clothing") {
-                        mapping["clothing"][0] = mapping["clothing"][0] + purchases[i].amount; 
-                        mapping["clothing"][1].push(merchant);
-                        mapping["clothing"][2].push(purchases[i]);
+                        mapping["Clothing"][0] = mapping["Clothing"][0] + purchases[i].amount; 
+                        mapping["Clothing"][1].push(merchant);
+                        mapping["Clothing"][2].push(purchases[i]);
                         total += purchases[i].amount;
                     }
                     else if (currCat.toLowerCase() == "entertainment") {
-                        mapping["entertainment"][0] = mapping["entertainment"][0] + purchases[i].amount; 
-                        mapping["entertainment"][1].push(merchant);
-                        mapping["entertainment"][2].push(purchases[i]);
+                        mapping["Entertainment"][0] = mapping["Entertainment"][0] + purchases[i].amount; 
+                        mapping["Entertainment"][1].push(merchant);
+                        mapping["Entertainment"][2].push(purchases[i]);
                         total += purchases[i].amount;}
                 }
             }
@@ -246,7 +249,7 @@
         //    lat = merchant.geocode.lat;
         //    lng = merchant.geocode.lng;
         //    url123 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + lng + "&radius=1600" + 
-        //     "&type=food&key=AIzaSyB-Ftgni6sX-MLo-3vbNzzsFkqPLJo8ezY";
+        //     "&type=Food&key=AIzaSyB-Ftgni6sX-MLo-3vbNzzsFkqPLJo8ezY";
 
         //     $.ajax( {
         //     url  : url123,
@@ -256,36 +259,6 @@
         //     }
         // } );
         // }
-        var map;
-        var service;
-        var infowindow;
-
-        function initialize() {
-        var pyrmont = new google.maps.LatLng(-33.8665433,151.1956316);
-
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: pyrmont,
-            zoom: 15
-            });
-
-        var request = {
-            location: pyrmont,
-            radius: '500',
-            types: ['store']
-        };
-
-        service = new google.maps.places.PlacesService(map);
-        service.nearbySearch(request, callback);
-        }
-
-        function callback(results, status) {
-        if (status == google.maps.places.PlacesServiceStatus.OK) {
-            for (var i = 0; i < results.length; i++) {
-            var place = results[i];
-            createMarker(results[i]);
-            }
-        }
-        }
 
 
     </script>
@@ -319,25 +292,25 @@
 
             function onClick(e) {
                 clicked = (e.chart.options.data[0].dataPoints[e.dataPointIndex]).label
-                document.getElementById('transList').innerHTML = 'Your ' + clicked + ' Transactions<br>';
+                document.getElementById('transList').innerHTML = '<h5 style="margin-top:20px; text-align: center">Your ' + clicked + ' Transactions</h5>';
                 for (key in mapping) {
                     if (key === clicked) { 
                         purchases = mapping[key][2];
                         merchants = mapping[key][1];
+                        console.log(purchases);
+                        document.getElementById('transList').innerHTML += 
+                        '<div style="margin-top:15px; margin-left:200px; width: 100%; align-content:center" class="row"> <div style="text-align:center" id="one" class="column"></div> <div style="text-align:center" id="twoo" class="column"></div> <div style="text-align:center" id="three" class="column"></div></div>';
+
                         for (var i = 0; i < purchases.length; i++) {
-                            // places(merchants[i]);
-
-
-
-
-                            document.getElementById('transList').innerHTML += merchants[i].name + " ";
-                            document.getElementById('transList').innerHTML += "- $" + purchases[i].amount + " ";
-                            document.getElementById('transList').innerHTML += moment(purchases[i].purchase_date, 'YYYY-MM-DD').format('MMMM D, Y') + "<br>"
+                            document.getElementById('one').innerHTML += merchants[i].name + "<br>";
+                            document.getElementById('twoo').innerHTML += "- $" + purchases[i].amount + " <br>";
+                            document.getElementById('three').innerHTML += moment(purchases[i].purchase_date, 'YYYY-MM-DD').format('MMMM D, Y') + "<br>"
                         }
                     }
                 }
-
-                initMap();
+                
+                data = places(merchants[0]);
+                initMap(merchants[0].geocode, data);
             }
 
         }
@@ -350,7 +323,7 @@
            lat = merchant.geocode.lat;
            lng = merchant.geocode.lng;
            url123 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + lng + "&radius=1600" + 
-            "&type=food&key=AIzaSyB-Ftgni6sX-MLo-3vbNzzsFkqPLJo8ezY";
+            "&type=Food&key=AIzaSyB-Ftgni6sX-MLo-3vbNzzsFkqPLJo8ezY";
 
             $.getJSON( {
             url  : url123,
