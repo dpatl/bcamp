@@ -39,7 +39,7 @@
 <div class="header-fixed-placeholder"></div>
 	<div class="limiter">
 		<div class="container-login100" style="background-image: url('../images/bg-01.jpg');">
-			<div id="counter"></div>
+			<div id="counter" style="color: #003152; font-size: 1000%; font-family:courier;"></div>
 
 			<div class="container-login100-form-btn" id = "loginButn" style="position: absolute; margin-top:-446px; margin-left:460px">
 				<button class="login100-form-btn">
@@ -81,7 +81,20 @@
 <!--===============================================================================================-->
 	<script src="../js/main.js"></script>
 	<script src="../js/savings"></script>
-
+	<script type="text/javascript">
+		function animateValue(id){
+    		var obj = document.getElementById(id);
+    		var current = (Math.random()*100000) >> 0;
+    
+   			setInterval(function(){
+        		obj.innerHTML = '$' + numberWithCommas(current++);
+    		},25);
+}
+			function numberWithCommas(x) {
+			    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			}
+			animateValue('counter');
+	</script>
 
 	<script type="text/javascript">
     document.getElementById("loginButn").onclick = function () {
