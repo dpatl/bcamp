@@ -37,12 +37,11 @@
                 <div class="tab">
                     <button class="tablinks" onclick="openCity(event, 'transactions')">Transactions</button>
                     <button class="tablinks" onclick="openCity(event, 'reports')">Reports</button>
-                    <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
                 </div>
                 
                 <!-- Tab content -->
                 <div id="transactions" class="tabcontent">
-                    <h3 style="text-align:center;">Your Transaction History</h3>
+                    <h3 style="text-align:center;">Your Transactions</h3>
                     <div style="margin-top:20px" class="row">
                         <div style="text-align:center; color:#0E4D92; font-size:20px; " id="desc" class="column"><b>Description</b></div>
                         <div style="text-align:center; color:#0E4D92; font-size:20px; margin-bottom: 10px;" id="type" class="column">Type</div>
@@ -52,15 +51,11 @@
                 </div>
                 
                 <div id="reports" class="tabcontent">
-                    <h3>Your Monthly Spendings</h3>
+                    <h3 style="text-align:center;">Your April Spendings</h3>
                     
                     <div id="chartContainer" style="height: 300px; width: 100%;"></div>
                 </div>
-                
-                <div id="Tokyo" class="tabcontent">
-                    <h3>Tokyo</h3>
-
-                </div>
+            
 			</div>
         </div>
 
@@ -103,23 +98,27 @@
             var mapping = {
                 "restaurant": 0.0,
                 "tech": 0.0,
-                "food": 0.0
+                "food": 0.0,
+                "clothing": 0.0
             };
+            total = 0.0;
 
             for (var i = 0; i < purchases.length; i++) {
                 merchant = merchants.getMerchant(purchases[i].merchant_id);
-                categories = merchant.category;
+                categories = merchant.category; 
+                
 
                 for (var j = 0; j < categories.length; j++) {
                     currCat = categories[j];
-                    if (currCat.toLowerCase() == "restaurant") {mapping["restaurant"] = mapping["restaurant"] + purchases[i].amount;}
-                    if (currCat.toLowerCase() == "tech") {mapping["tech"] = mapping["tech"] + purchases[i].amount;}
-                    if (currCat.toLowerCase() == "food") {mapping["food"] = mapping["food"] + purchases[i].amount;}
+                    if (currCat.toLowerCase() == "restaurant") {mapping["food"] = mapping["food"] + purchases[i].amount; total += purchases[i].amount;}
+                    if (currCat.toLowerCase() == "tech") {mapping["tech"] = mapping["tech"] + purchases[i].amount; total += purchases[i].amount;}
+                    if (currCat.toLowerCase() == "food") {mapping["food"] = mapping["food"] + purchases[i].amount; total += purchases[i].amount;}
+                    if (currCat.toLowerCase() == "clothing") {mapping["clothing"] = mapping["clothing"] + purchases[i].amount; total += purchases[i].amount;}
                 }
 
             }
 
-            createChart(mapping);
+            createChart(mapping, total);
 
         }
 
@@ -151,28 +150,26 @@
     </script>
 
     <script>
-        function createChart(mapping) {
+        function createChart(mapping, total) {
             
             var chart = new CanvasJS.Chart("chartContainer", {
                 height: 300,
                 animationEnabled: true,
                 backgroundColor: "#ccc",
-                title: {
-                    text: ""
-                },
+                title: {text: ""},
                 data: [{
                     type: "pie",
                     startAngle: 240,
                     radius: 80,
                     yValueFormatString: "##0.00\"%\"",
                     indexLabel: "{label} {y}",
-                    dataPoints: [
-                        {y: mapping["restaurant"], label: "Restaurants"},
-                        {y: mapping["tech"], label: "Tech"},
-                        {y: mapping["food"], label: "Food"}
-                    ]
+                    dataPoints: []
                 }]
             });
+
+            for (key in mapping) {if (mapping[key] > 0) {chart.options.data[0].dataPoints.push({y: (mapping[key] / total) * 100, label: key})}}
+
+
             chart.render();
         
         }
