@@ -20,7 +20,7 @@ client.businessMatch({
   state: 'NY',
   country: 'US'
 }).then(response => {
-  console.log(response.jsonBody.businesses[0]);
-}).catch(e => {
-  console.log(e);
+  var store_id = response.jsonBody.businesses[0].id;
+  console.log(store_id);
+  client.busine
 });
