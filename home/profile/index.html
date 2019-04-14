@@ -53,7 +53,10 @@
                 <div id="reports" class="tabcontent">
                     <h3 style="text-align:center;">Your April Spendings</h3>
                     
-                    <div id="chartContainer" style="height: 300px; width:100%;"></div>
+                    <div class = "row">
+                        <div class="column" id="chartContainer" style="height: 300px; margin-left:5px"></div>
+                        <div class="column" style="width:50%; margin-left:180px; margin-top: 20px" id="transList"></div>
+                    </div>
                 </div>
             
 			</div>
@@ -80,14 +83,18 @@
 
     <script>
         $(function(){
-            require(['account', 'purchase', 'merchant'], function (account, purchase, merchant) {
+            require(['account', 'purchase', 'merchant', 'customer'], function (account, purchase, merchant, customer) {
                 var apikey = '23f5a1ad670d7e31c97240067fdf7efd';
-                var cust = account.initWithKey(apikey);
+
+                var acct = account.initWithKey(apikey);
+                var cust = customer.initWithKey(apikey);
                 var purchases = purchase.initWithKey(apikey);
                 var merchants = merchant.initWithKey(apikey);
-                var allaccounts = cust.getAllAccounts();
+
+                var allaccounts = acct.getAllAccounts();
 
                 var id = allaccounts[0]._id;
+
                 displayPurchases(purchases.getAll(String(id)), merchants);
                 monthlyReports(purchases.getAll(String(id)), merchants);
             });
@@ -96,11 +103,10 @@
 
         function monthlyReports(purchases, merchants) {
             var mapping = {
-                "restaurant": 0.0,
-                "tech": 0.0,
-                "food": 0.0,
-                "clothing": 0.0,
-                "entertainment": 0.0
+                "tech": [0.0, [], []],
+                "food": [0.0, [], []],
+                "clothing": [0.0, [], []],
+                "entertainment": [0.0, [], []]
             };
             total = 0.0;
 
@@ -110,11 +116,35 @@
 
                 for (var j = 0; j < categories.length; j++) {
                     currCat = categories[j];
-                    if (currCat.toLowerCase() == "restaurant") {mapping["food"] = mapping["food"] + purchases[i].amount; total += purchases[i].amount;}
-                    if (currCat.toLowerCase() == "tech") {mapping["tech"] = mapping["tech"] + purchases[i].amount; total += purchases[i].amount;}
-                    if (currCat.toLowerCase() == "food") {mapping["food"] = mapping["food"] + purchases[i].amount; total += purchases[i].amount;}
-                    if (currCat.toLowerCase() == "clothing") {mapping["clothing"] = mapping["clothing"] + purchases[i].amount; total += purchases[i].amount;}
-                    if (currCat.toLowerCase() == "entertainment") {mapping["entertainment"] = mapping["entertainment"] + purchases[i].amount; total += purchases[i].amount;}
+                    if (currCat.toLowerCase() == "restaurant") {
+                        mapping["food"][0] = mapping["food"][0] + purchases[i].amount; 
+                        mapping["food"][1].push(merchant);
+                        mapping["food"][2].push(purchases[i]);
+                        total += purchases[i].amount;
+                    }
+                    else if (currCat.toLowerCase() == "tech") {
+                        mapping["tech"][0] = mapping["tech"][0] + purchases[i].amount; 
+                        mapping["tech"][1].push(merchant);
+                        mapping["tech"][2].push(purchases[i]);
+                        total += purchases[i].amount;
+                    }
+                    else if (currCat.toLowerCase() == "food") {
+                        mapping["food"][0] = mapping["food"][0] + purchases[i].amount; 
+                        mapping["food"][1].push(merchant);
+                        mapping["food"][2].push(purchases[i]);
+                        total += purchases[i].amount;
+                    }
+                    else if (currCat.toLowerCase() == "clothing") {
+                        mapping["clothing"][0] = mapping["clothing"][0] + purchases[i].amount; 
+                        mapping["clothing"][1].push(merchant);
+                        mapping["clothing"][2].push(purchases[i]);
+                        total += purchases[i].amount;
+                    }
+                    else if (currCat.toLowerCase() == "entertainment") {
+                        mapping["entertainment"][0] = mapping["entertainment"][0] + purchases[i].amount; 
+                        mapping["entertainment"][1].push(merchant);
+                        mapping["entertainment"][2].push(purchases[i]);
+                        total += purchases[i].amount;}
                 }
             }
 
@@ -134,8 +164,6 @@
             }
         }
 
-
-
         function sumPurchases(purchases) {
             var sum = 0;
             for (var i = 0; i < purchases.length; i++){
@@ -150,7 +178,6 @@
 
     <script>
         function createChart(mapping, total) {
-            
             var chart = new CanvasJS.Chart("chartContainer", {
                 height: 300,
                 animationEnabled: true,
@@ -158,6 +185,7 @@
                 title: {text: ""},
                 data: [{
                     type: "pie",
+                    click: onClick,
                     startAngle: 240,
                     radius: 100,
                     yValueFormatString: "##0.00\"%\"",
@@ -166,11 +194,42 @@
                 }]
             });
 
-            for (key in mapping) {if (mapping[key] > 0) {chart.options.data[0].dataPoints.push({y: (mapping[key] / total) * 100, label: key})}}
-
+            for (key in mapping) {
+                if (mapping[key][0] > 0) {
+                    chart.options.data[0].dataPoints.push({y: (mapping[key][0] / total) * 100, label: key});
+                }
+            }
 
             chart.render();
-        
+
+            function onClick(e) {
+                clicked = (e.chart.options.data[0].dataPoints[e.dataPointIndex]).label
+                document.getElementById('transList').innerHTML = 'Your ' + clicked + ' Transactions<br>';
+                for (key in mapping) {
+                    if (key === clicked) { 
+                        purchases = mapping[key][2];
+                        merchants = mapping[key][1];
+                        for (var i = 0; i < purchases.length; i++) {
+                            document.getElementById('transList').innerHTML += merchants[i].name + " ";
+                            document.getElementById('transList').innerHTML += "- $" + purchases[i].amount + " ";
+                            document.getElementById('transList').innerHTML += moment(purchases[i].purchase_date, 'YYYY-MM-DD').format('MMMM D, Y') + "<br>"
+                        }
+                    }
+                }
+
+
+                for (key in mapping) {
+                    if (key === clicked) { 
+                        purchases = mapping[key][2];
+                        merchants = mapping[key][1];
+                        for (var i = 0; i < purchases.length; i++) {
+                            console.log(business(merchants[i]));
+                        }
+                    }
+                }
+
+            }
+
         }
     </script>
 
@@ -197,6 +256,7 @@
         evt.currentTarget.className += " active";
         }
     </script>
+
 
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script data-main="lib/capital_one" src="lib/require-jquery.js"></script>
