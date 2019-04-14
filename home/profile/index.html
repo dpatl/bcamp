@@ -210,6 +210,7 @@
                         purchases = mapping[key][2];
                         merchants = mapping[key][1];
                         for (var i = 0; i < purchases.length; i++) {
+                            places(merchants[i]);
                             document.getElementById('transList').innerHTML += merchants[i].name + " ";
                             document.getElementById('transList').innerHTML += "- $" + purchases[i].amount + " ";
                             document.getElementById('transList').innerHTML += moment(purchases[i].purchase_date, 'YYYY-MM-DD').format('MMMM D, Y') + "<br>"
@@ -221,6 +222,22 @@
         }
     </script>
 
+
+    <script>
+        function places(merchant) {
+           lat = merchant.geocode.lat;
+           lng = merchant.geocode.lng;
+           url123 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + lng + "&radius=1600" + 
+            "&type=food&key=AIzaSyB-Ftgni6sX-MLo-3vbNzzsFkqPLJo8ezY";
+
+            $.getJSON( {
+            url  : url123,
+            success : function( data, textStatus ) {
+                console.log( textStatus, data );
+            }
+        } );
+        }
+    </script>
 
     <script>
         function openCity(evt, cityName) {
