@@ -216,6 +216,18 @@
                         }
                     }
                 }
+
+
+                for (key in mapping) {
+                    if (key === clicked) { 
+                        purchases = mapping[key][2];
+                        merchants = mapping[key][1];
+                        for (var i = 0; i < purchases.length; i++) {
+                            console.log(business(merchants[i]));
+                        }
+                    }
+                }
+
             }
 
         }
@@ -244,6 +256,7 @@
         evt.currentTarget.className += " active";
         }
     </script>
+
 
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script data-main="lib/capital_one" src="lib/require-jquery.js"></script>

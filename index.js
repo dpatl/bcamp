@@ -59,8 +59,6 @@ function business(merchant) {
 		console.log(e);
 	});
 
-	return bod;
-
 }
 
 
