@@ -91,15 +91,15 @@
                 var merchants = merchant.initWithKey(apikey);
                 var allaccounts = cust.getAllAccounts();
 
-                for (var i = 0; i < allaccounts.length; i++) {
+               // for (var i = 0; i < allaccounts.length; i++) {
                     // var firstName = allaccounts[i].first_name;
                     // var lastName = allaccounts[i].last_name;
-                    var id = allaccounts[i]._id;
+                    var id = allaccounts[0]._id;
                     // console.log(id);
                     // console.log(purchases.getAll(String(id)))
                     // console.log(sumPurchases(purchases.getAll(String(id))));
                     displayPurchases(purchases.getAll(String(id)), merchants);
-                }
+                //}
             });
 
         });
