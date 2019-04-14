@@ -44,16 +44,17 @@
                 <div id="transactions" class="tabcontent">
                     <h3 style="text-align:center;">Your Transaction History</h3>
                     <div style="margin-top:20px" class="row">
-                        <div style="text-align:center; color:#0E4D92; font-size:20px" id="desc" class="column"><b>Description</b></div>
-                        <div style="text-align:center;color:#0E4D92; font-size:20px" id="type" class="column">Type</div>
-                        <div style="text-align:center;color:#0E4D92; font-size:20px" id="amt"  class="column">Amount</div>
-                        <div style="text-align:center;color:#0E4D92; font-size:20px" id="date" class="column">Date</div>
+                        <div style="text-align:center; color:#0E4D92; font-size:20px; " id="desc" class="column"><b>Description</b></div>
+                        <div style="text-align:center; color:#0E4D92; font-size:20px; margin-bottom: 10px;" id="type" class="column">Type</div>
+                        <div style="text-align:center; color:#0E4D92; font-size:20px; margin-bottom: 10px;" id="amt"  class="column">Amount</div>
+                        <div style="text-align:center; color:#0E4D92; font-size:20px; margin-bottom: 10px;" id="date" class="column">Date</div>
                     </div>
                 </div>
                 
                 <div id="reports" class="tabcontent">
                     <h3>Your Monthly Spendings</h3>
                     
+                    <div id="chartContainer" style="height: 300px; width: 100%;"></div>
                 </div>
                 
                 <div id="Tokyo" class="tabcontent">
@@ -91,29 +92,47 @@
                 var merchants = merchant.initWithKey(apikey);
                 var allaccounts = cust.getAllAccounts();
 
-               // for (var i = 0; i < allaccounts.length; i++) {
-                    // var firstName = allaccounts[i].first_name;
-                    // var lastName = allaccounts[i].last_name;
-                    var id = allaccounts[0]._id;
-                    // console.log(id);
-                    // console.log(purchases.getAll(String(id)))
-                    // console.log(sumPurchases(purchases.getAll(String(id))));
-                    displayPurchases(purchases.getAll(String(id)), merchants);
-                //}
+                var id = allaccounts[0]._id;
+                displayPurchases(purchases.getAll(String(id)), merchants);
+                monthlyReports(purchases.getAll(String(id)), merchants);
             });
 
         });
 
+        function monthlyReports(purchases, merchants) {
+            var mapping = {
+                "restaurant": 0.0,
+                "tech": 0.0,
+                "food": 0.0
+            };
+
+            for (var i = 0; i < purchases.length; i++) {
+                merchant = merchants.getMerchant(purchases[i].merchant_id);
+                categories = merchant.category;
+
+                for (var j = 0; j < categories.length; j++) {
+                    currCat = categories[j];
+                    if (currCat.toLowerCase() == "restaurant") {mapping["restaurant"] = mapping["restaurant"] + purchases[i].amount;}
+                    if (currCat.toLowerCase() == "tech") {mapping["tech"] = mapping["tech"] + purchases[i].amount;}
+                    if (currCat.toLowerCase() == "food") {mapping["food"] = mapping["food"] + purchases[i].amount;}
+                }
+
+            }
+
+            createChart(mapping);
+
+        }
+
         function displayPurchases(purchases, merchants) {
-            for (var i = 0; i < purchases.length; i++){
+            for (var i = 0; i < purchases.length; i++) {
                 document.getElementById('desc').innerHTML += 
-                    '<div style="color:black; font-size: 16px;">' + merchants.getMerchant(purchases[i].merchant_id).name + '</div>';
+                    '<div style="margin-top: 10px; color:black; font-size: 16px;">' + merchants.getMerchant(purchases[i].merchant_id).name + '</div>';
                 document.getElementById('type').innerHTML += 
-                    '<div style="color:black; font-size: 16px;">Purchase</div>';
+                    '<div style="margin-top: 10px; color:black; font-size: 16px;">Purchase</div>';
                 document.getElementById('amt').innerHTML += 
-                    '<div style="color:red; font-size: 16px;"> - $' + purchases[i].amount + '</div>';
+                    '<div style="margin-top: 10px; color:red; font-size: 16px;"> - $' + purchases[i].amount + '</div>';
                 document.getElementById('date').innerHTML += 
-                    '<div style= "color:black;font-size: 16px;"">' + moment(purchases[i].purchase_date, 'YYYY-MM-DD').format('MMMM D, Y') + '</div>';    
+                    '<div style="margin-top: 10px; color:black;font-size: 16px;"">' + moment(purchases[i].purchase_date, 'YYYY-MM-DD').format('MMMM D, Y') + '</div>';    
             }
         }
 
@@ -131,33 +150,32 @@
 
     </script>
 
-    <script type="text/javascript">
-        var request = require('request');
-        var _ = require('underscore');
-        var ids = [];
-        var x = false; 
-        request("http://api.reimaginebanking.com/accounts?key=ea28bcabdb8040d803667622d9defbe6", function(error, response, body) {
-            //convert data into usable array of json objects
-            var json = JSON.parse(body);
-            for(var idx in json){
-                ids.push(json[idx]._id);
-            }
-            console.log(ids);
-            x = true;
-            console.log('---------------------------------');
-        })
-
-        console.log(x);  
-        console.log(ids);
-
-        function displayPurchases(purchases) {
-            for (var i = 0; i < purchases.length; i++){
-                document.getElementById('reports').innerHTML += 
-                '<div>' purchases.;
-            }
+    <script>
+        function createChart(mapping) {
+            
+            var chart = new CanvasJS.Chart("chartContainer", {
+                height: 300,
+                animationEnabled: true,
+                backgroundColor: "#ccc",
+                title: {
+                    text: ""
+                },
+                data: [{
+                    type: "pie",
+                    startAngle: 240,
+                    radius: 80,
+                    yValueFormatString: "##0.00\"%\"",
+                    indexLabel: "{label} {y}",
+                    dataPoints: [
+                        {y: mapping["restaurant"], label: "Restaurants"},
+                        {y: mapping["tech"], label: "Tech"},
+                        {y: mapping["food"], label: "Food"}
+                    ]
+                }]
+            });
+            chart.render();
+        
         }
-
-
     </script>
 
 
@@ -184,8 +202,9 @@
         }
     </script>
 
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script data-main="lib/capital_one" src="lib/require-jquery.js"></script>
-    
+
 
 </body>
 </html>
