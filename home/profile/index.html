@@ -46,7 +46,7 @@
 	<div class="limiter">
         <div class="container-login100" style="background-image: url('../../images/bg-01.jpg');">
 			<div class="wrap-profile100">
-                <div class="profile100-form-title p-b-34 p-t-27">Your Profile</div>
+                <div class="profile100-form-title p-b-34 p-t-27">Timmy's Account</div>
 
                 <div class="tab">
                     <button class="tablinks" onclick="openCity(event, 'transactions')">Transactions</button>
@@ -344,6 +344,22 @@
     </script>
 
 
+
+    <script>
+        function places(merchant) {
+           lat = merchant.geocode.lat;
+           lng = merchant.geocode.lng;
+           url123 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + lng + "&radius=1600" + 
+            "&type=food&key=AIzaSyB-Ftgni6sX-MLo-3vbNzzsFkqPLJo8ezY";
+
+            $.getJSON( {
+            url  : url123,
+            success : function( data, textStatus ) {
+                console.log( textStatus, data );
+            }
+        } );
+        }
+    </script>
 
     <script>
         function openCity(evt, cityName) {
