@@ -26,6 +26,7 @@
 	<link rel="stylesheet" type="text/css" href="../../css/util.css">
     <link rel="stylesheet" type="text/css" href="../../css/main.css">
 <!--===============================================================================================-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.0/moment.min.js"></script>
 </head>
 <body>
 	<div class="limiter">
@@ -43,7 +44,7 @@
                 <div id="transactions" class="tabcontent">
                     <h3 style="text-align:center;">Your Transaction History</h3>
                     <div style="margin-top:20px" class="row">
-                        <div style="text-align:center;" id="desc" class="column">Description</div>
+                        <div style="text-align:center; color:#0E4D92; font-size:20px" id="desc" class="column"><b>Description</b></div>
                         <div style="text-align:center;" id="type" class="column">Type</div>
                         <div style="text-align:center;" id="amt"  class="column">Amount</div>
                         <div style="text-align:center;" id="date" class="column">Date</div>
@@ -97,26 +98,26 @@
                     // console.log(id);
                     // console.log(purchases.getAll(String(id)))
                     // console.log(sumPurchases(purchases.getAll(String(id))));
-                    displayPurchases(purchases.getAll(String(id)));
+                    displayPurchases(purchases.getAll(String(id)), merchants);
                 }
             });
 
         });
 
-        function displayPurchases(purchases) {
+        function displayPurchases(purchases, merchants) {
             for (var i = 0; i < purchases.length; i++){
                 document.getElementById('desc').innerHTML += 
-                    '<div>' + purchases[i].amount + '</div>';
+                    '<div style="color:black">' + merchants.getMerchant(purchases[i].merchant_id).name + '</div>';
                 document.getElementById('type').innerHTML += 
                     '<div>Purchase</div>';
                 document.getElementById('amt').innerHTML += 
-                    '<div style="color:red"> -' + purchases[i].amount + '</div>';
+                    '<div style="color:red"> - $' + purchases[i].amount + '</div>';
                 document.getElementById('date').innerHTML += 
-                    '<div>' + purchases[i].purchase_date + '</div>';    
+                    '<div>' + moment(purchases[i].purchase_date, 'YYYY-MM-DD').format('MMMM D, Y') + '</div>';    
             }
         }
 
-        
+
 
         function sumPurchases(purchases) {
             var sum = 0;
@@ -155,5 +156,7 @@
     </script>
 
     <script data-main="lib/capital_one" src="lib/require-jquery.js"></script>
+    
+
 </body>
 </html>
