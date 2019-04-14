@@ -62,18 +62,4 @@ function business(merchant) {
 }
 
 
-<<<<<<< HEAD
-client.businessMatch({
-  name: 'Chipotle Mexican Grill',
-  address1: 'South Meadow Street',
-  city: 'Ithica',
-  state: 'NY',
-  country: 'US'
-}).then(response => {
-  var store_id = response.jsonBody.businesses[0].id;
-  console.log(store_id);
-  client.busine
-});
-=======
  
->>>>>>> 8f23d3952b08571da0198a7db17b5bde25055302
