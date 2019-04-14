@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Login V3</title>
+    <title>Beacon</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->	
@@ -26,13 +26,27 @@
 	<link rel="stylesheet" type="text/css" href="../../css/util.css">
     <link rel="stylesheet" type="text/css" href="../../css/main.css">
 <!--===============================================================================================-->
+    <style>
+        #map {
+            height: 500px;
+            width: 50%;
+        }
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.0/moment.min.js"></script>
 </head>
 <body>
 	<div class="limiter">
         <div class="container-login100" style="background-image: url('../../images/bg-01.jpg');">
 			<div class="wrap-profile100">
-                <div class="profile100-form-title p-b-34 p-t-27">Your Profile</div>
+                <div class="profile100-form-title p-b-34 p-t-27">Timmy's Account</div>
 
                 <div class="tab">
                     <button class="tablinks" onclick="openCity(event, 'transactions')">Transactions</button>
@@ -55,9 +69,13 @@
                     
                     <div class = "row">
                         <div class="column" id="chartContainer" style="height: 300px; margin-left:5px"></div>
-                        <div class="column" style="width:50%; margin-left:180px; margin-top: 20px" id="transList"></div>
+                        <div id="map" style="margin-left:220px; margin-top:40px"></div>
                     </div>
-                </div>
+
+                    <div style="width:50%; margin-left:120px; margin-top: 20px; z-index: 10;" id="transList"></div>
+
+               
+                   
             
 			</div>
         </div>
@@ -80,6 +98,51 @@
 	<script src="../../vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
 	<script src="../../js/main.js"></script>
+
+    <script>
+            var map;
+            function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 13.5,
+                center: new google.maps.LatLng(38.9072, -77.0369)
+            });
+    
+            var cityCircle = new google.maps.Circle({
+                strokeColor: '#FF0000',
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: '#FF0000',
+                fillOpacity: 0.35,
+                map: map,
+                center: map.center,
+                radius: 1609.34
+            });
+
+            
+    
+            // Create a <script> tag and set the USGS URL as the source.
+            var script = document.createElement('script');
+            // This example uses a local copy of the GeoJSON stored at
+            // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
+            script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
+            document.getElementsByTagName('head')[0].appendChild(script);
+            }
+    
+            // Loop through the results array and place a marker for each
+            // set of coordinates.
+            window.eqfeed_callback = function(results) {
+            for (var i = 0; i < results.features.length; i++) {
+                var coords = results.features[i].geometry.coordinates;
+                var latLng = new google.maps.LatLng(coords[1],coords[0]);
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map
+                });
+            }
+            }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-Ftgni6sX-MLo-3vbNzzsFkqPLJo8ezY"></script>
+
 
     <script>
         $(function(){
@@ -174,7 +237,26 @@
             return sum;
         }
 
+
     </script>
+
+
+    <script>
+        function places(merchant) {
+           lat = merchant.geocode.lat;
+           lng = merchant.geocode.lng;
+           url123 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + lng + "&radius=1600" + 
+            "&type=food&key=AIzaSyB-Ftgni6sX-MLo-3vbNzzsFkqPLJo8ezY";
+
+            $.ajax( {
+            url  : url123,
+            success : function( data, textStatus ) {
+                console.log( textStatus, data);
+            }
+        } );
+        }
+    </script>
+
 
     <script>
         function createChart(mapping, total) {
@@ -217,10 +299,13 @@
                         }
                     }
                 }
+
+                initMap();
             }
 
         }
     </script>
+
 
 
     <script>
