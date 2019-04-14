@@ -45,9 +45,9 @@
                     <h3 style="text-align:center;">Your Transaction History</h3>
                     <div style="margin-top:20px" class="row">
                         <div style="text-align:center; color:#0E4D92; font-size:20px" id="desc" class="column"><b>Description</b></div>
-                        <div style="text-align:center;" id="type" class="column">Type</div>
-                        <div style="text-align:center;" id="amt"  class="column">Amount</div>
-                        <div style="text-align:center;" id="date" class="column">Date</div>
+                        <div style="text-align:center;color:#0E4D92; font-size:20px" id="type" class="column">Type</div>
+                        <div style="text-align:center;color:#0E4D92; font-size:20px" id="amt"  class="column">Amount</div>
+                        <div style="text-align:center;color:#0E4D92; font-size:20px" id="date" class="column">Date</div>
                     </div>
                 </div>
                 
@@ -107,13 +107,13 @@
         function displayPurchases(purchases, merchants) {
             for (var i = 0; i < purchases.length; i++){
                 document.getElementById('desc').innerHTML += 
-                    '<div style="color:black">' + merchants.getMerchant(purchases[i].merchant_id).name + '</div>';
+                    '<div style="color:black; font-size: 16px;">' + merchants.getMerchant(purchases[i].merchant_id).name + '</div>';
                 document.getElementById('type').innerHTML += 
-                    '<div>Purchase</div>';
+                    '<div style="color:black; font-size: 16px;">Purchase</div>';
                 document.getElementById('amt').innerHTML += 
-                    '<div style="color:red"> - $' + purchases[i].amount + '</div>';
+                    '<div style="color:red; font-size: 16px;"> - $' + purchases[i].amount + '</div>';
                 document.getElementById('date').innerHTML += 
-                    '<div>' + moment(purchases[i].purchase_date, 'YYYY-MM-DD').format('MMMM D, Y') + '</div>';    
+                    '<div style= "color:black;font-size: 16px;"">' + moment(purchases[i].purchase_date, 'YYYY-MM-DD').format('MMMM D, Y') + '</div>';    
             }
         }
 
