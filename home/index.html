@@ -39,9 +39,9 @@
 <div class="header-fixed-placeholder"></div>
 	<div class="limiter">
 		<div class="container-login100" style="background-image: url('../images/bg-01.jpg');">
-			<div id="counter">0</div>
+			<div id="counter"></div>
 
-			<div class="container-login100-form-btn" id = "loginButn" style="position: absolute; margin-top:-446px; margin-left:450px">
+			<div class="container-login100-form-btn" id = "loginButn" style="position: absolute; margin-top:-446px; margin-left:460px">
 				<button class="login100-form-btn">
 					Login 
 				</button>
@@ -50,6 +50,12 @@
 			<div class="container-login100-form-btn" id = "signupButn" style="position: absolute; margin-top:-446px; margin-left:590px">
 				<button class="login100-form-btn">
 					Sign Up 
+				</button>
+			</div>
+
+			<div class="container-login100-form-btn" id = "profileButn" style="position: absolute; margin-top:-446px; margin-left:330px">
+				<button class="login100-form-btn">
+					Profile 
 				</button>
 			</div>
 
@@ -76,15 +82,27 @@
 	<script src="../js/main.js"></script>
 	<script src="../js/savings"></script>
 
+
 	<script type="text/javascript">
     document.getElementById("loginButn").onclick = function () {
         location.href = "login/index.html"
     };
-	</script>
+    </script>
+
+    <script type="text/javascript">
+    document.getElementById("signupButn").onclick = function () {
+        location.href = "signup/index.html"
+    };
+    </script>
+
+    <script type="text/javascript">
+    document.getElementById("profileButn").onclick = function () {
+        location.href = "profile/index.html"
+    };
+    </script>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
-
 	$(document).ready(function(){
 
 		var showHeaderAt = 150;
@@ -92,12 +110,7 @@
 		var win = $(window),
 				body = $('body');
 
-		// Show the fixed header only on larger screen devices
-
 		if(win.width() > 400){
-
-			// When we scroll more than 150px down, we set the
-			// "fixed" class on the body element.
 
 			win.on('scroll', function(e){
 
