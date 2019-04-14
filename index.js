@@ -7,7 +7,5 @@ request('http://api.reimaginebanking.com/accounts?key=a3555d774ac75bee7c1c13c843
 	for(var idx in json){
 		console.log(json[idx]);
 	}
-	// _.each(body, function(obj){ 
-	// 	console.log(obj)
-	// });
+
 })
