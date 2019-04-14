@@ -1,34 +1,26 @@
-var request = require('request');
-var _ = require('underscore');
-var ids = [];
-var x = false; 
-request("http://api.reimaginebanking.com/accounts?key=ea28bcabdb8040d803667622d9defbe6", function(error, response, body) {
-	//convert data into usable array of json objects
-	var json = JSON.parse(body);
-	for(var idx in json){
-		ids.push(json[idx]._id);
-	}
-	console.log(ids);
-	x = true;
-	console.log('---------------------------------');
-})
+'use strict';
 
-console.log(x);
-console.log(ids);
+const yelp = require('yelp-fusion');
 
-/*
-console.log(ids);
-for (var i =0; i < ids.length; i++) {
-	console.log("GGDGDGDGGD");
+// Place holder for Yelp Fusion's API Key. Grab them
+// from https://www.yelp.com/developers/v3/manage_app
+const apiKey = 'iWc4aVeCqx_MaWiIIkxqw2oIcb7eNpHUx-_8fMggFg0q_MszgAnESqXjuaNhRtSVs56WxFrh6svdWvJ3asHrtnaatYxxtatnby_e6kXsas64dz_GJVA1wI1VK9CyXHYx';
 
-		url = "http://api.reimaginebanking.com/accounts/" + ids[i]+ "/purchases?key=ea28bcabdb8040d803667622d9defbe6";
-		console.log(url);
-		request(url, 
-			function(error, response, body) {
-			var json = JSON.parse(body);
-			for(var idx in json){
-				console.log(json[idx]);
-			}
-		})
-}
-*/
+const searchRequest = {
+  name:'Chipotle Mexican Grill',
+  address: 'South Meadow Street, Ithica, NY'
+};
+
+const client = yelp.client(apiKey);
+
+client.businessMatch({
+  name: 'Chipotle Mexican Grill',
+  address1: 'South Meadow Street',
+  city: 'Ithica',
+  state: 'NY',
+  country: 'US'
+}).then(response => {
+  console.log(response.jsonBody.businesses[0]);
+}).catch(e => {
+  console.log(e);
+});
