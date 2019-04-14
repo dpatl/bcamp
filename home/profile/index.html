@@ -102,10 +102,10 @@
 
     <script>
             var map;
-            function initMap() {
+            function initMap(center_stuff, x) {
             map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 13.5,
-                center: new google.maps.LatLng(38.9072, -77.0369)
+                center: new google.maps.LatLng(center_stuff.lat, center_stuff.lon)
             });
     
             var cityCircle = new google.maps.Circle({
