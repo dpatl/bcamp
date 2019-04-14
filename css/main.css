@@ -366,6 +366,18 @@ iframe {
   background-color: #ccc;
 }
 
+.column {
+
+  width: 25%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
 .wrap-profile100 {
   width: 1500px;
   border-radius: 10px;
